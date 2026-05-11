@@ -31,6 +31,7 @@ func _physics_process(delta: float) -> void:
 func _process(delta: float) -> void:
 	if stats.hp_regen > 0:
 		stats.heal(stats.hp_regen * delta)
+	queue_redraw()
 	if stats.invincible:
 		_invincible_timer -= delta
 		_flash_timer -= delta
@@ -77,7 +78,6 @@ func _trigger_camera_shake() -> void:
 		main.camera_shake()
 
 func _draw() -> void:
-	var gun_offset_x = 14 if _facing_right else -14
 	# Body
 	draw_circle(Vector2.ZERO, 14, Color(0.27, 0.53, 1))
 	draw_circle(Vector2(0, 3), 10, Color(0.4, 0.65, 1))
@@ -87,9 +87,24 @@ func _draw() -> void:
 	var pupil_dir = 1 if _facing_right else -1
 	draw_circle(Vector2(-4 + pupil_dir, -4), 1.5, Color.BLACK)
 	draw_circle(Vector2(4 + pupil_dir, -4), 1.5, Color.BLACK)
-	# Gun
-	draw_rect(Rect2(gun_offset_x - (2 if _facing_right else -8), -3, 10, 5), Color(0.8, 0.8, 0.8))
-	draw_circle(Vector2(gun_offset_x + (8 if _facing_right else -6), -0.5), 2, Color.WHITE, false, 1)
+	# Gun - aim at nearest enemy
+	var aim_dir = Vector2.RIGHT
+	var nearest = get_nearest_enemy()
+	if nearest:
+		aim_dir = (nearest.global_position - global_position).normalized()
+	elif not _facing_right:
+		aim_dir = Vector2.LEFT
+	var gun_start = aim_dir * 10
+	var gun_end = aim_dir * 22
+	var perp = aim_dir.orthogonal()
+	var gun_pts = PackedVector2Array([
+		gun_start + perp * 2.5,
+		gun_start - perp * 2.5,
+		gun_end - perp * 1.5,
+		gun_end + perp * 1.5
+	])
+	draw_colored_polygon(gun_pts, Color(0.7, 0.7, 0.7))
+	draw_circle(gun_end, 2.5, Color(0.9, 0.9, 0.9), false, 1.5)
 
 func _on_died() -> void:
 	GameManager.change_state(GameManager.GameState.GAME_OVER)

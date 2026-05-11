@@ -6,6 +6,7 @@ extends CharacterBody2D
 var hp: float
 var player: Player
 var flash_tween: Tween
+var _damage_cooldown: float = 0.0
 
 func _ready() -> void:
 	add_to_group("enemies")
@@ -34,6 +35,18 @@ func _physics_process(_delta: float) -> void:
 	if not player:
 		return
 	_move_toward_player(_delta)
+	_check_contact_damage(_delta)
+
+func _check_contact_damage(delta: float) -> void:
+	_damage_cooldown -= delta
+	if _damage_cooldown > 0:
+		return
+	for i in get_slide_collision_count():
+		var col = get_slide_collision(i)
+		if col.get_collider() and col.get_collider().is_in_group("player"):
+			player.stats.take_damage(enemy_data.damage)
+			_damage_cooldown = 0.5
+			break
 
 func _move_toward_player(_delta: float) -> void:
 	var direction = (player.global_position - global_position).normalized()
