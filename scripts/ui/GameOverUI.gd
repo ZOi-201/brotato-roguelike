@@ -7,6 +7,7 @@ extends CanvasLayer
 
 func _ready() -> void:
 	GameManager.game_state_changed.connect(_on_state_changed)
+	restart_btn.pressed.connect(_on_restart_pressed)
 	visible = false
 
 func _on_state_changed(state: GameManager.GameState) -> void:

@@ -11,6 +11,7 @@ config_version=5
 [application]
 
 config/name="godot_test"
+run/main_scene="uid://main001"
 config/features=PackedStringArray("4.6", "Forward Plus")
 config/icon="res://icon.svg"
 
@@ -47,10 +48,8 @@ move_down={
 
 [physics]
 
-common/max_physics_steps_per_frame=8
 2d/physics_engine="GodotPhysics2D"
 
 [rendering]
 
-renderer/rendering_method="forward_plus"
 rendering_device/driver.windows="d3d12"
