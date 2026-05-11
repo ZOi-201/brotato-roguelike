@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="PlayerStats" load_steps=2 format=3 uid="uid://playerstats001"]
+
+[ext_resource type="Script" path="res://scripts/resources/PlayerStats.gd" id="1_stats"]
+
+[resource]
+script = ExtResource("1_stats")
+max_hp = 100.0
+hp = 100.0
+hp_regen = 0.0
+damage_mult = 1.0
+attack_speed_mult = 1.0
+speed = 150.0
+dodge = 0.0
+armor = 0
+luck = 0
+harvesting = 0
+lifesteal = 0.0

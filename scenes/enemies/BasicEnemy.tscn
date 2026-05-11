@@ -1,6 +1,7 @@
-[gd_scene load_steps=3 format=3 uid="uid://basicenemy001"]
+[gd_scene load_steps=4 format=3 uid="uid://basicenemy001"]
 
 [ext_resource type="Script" path="res://scripts/enemies/BaseEnemy.gd" id="1_baseenemy"]
+[ext_resource type="Resource" uid="uid://basicenemydata001" path="res://scenes/enemies/BasicEnemy_data.tres" id="2_data"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_basic"]
 radius = 12.0
@@ -9,6 +10,7 @@ radius = 12.0
 collision_layer = 2
 collision_mask = 1
 script = ExtResource("1_baseenemy")
+enemy_data = ExtResource("2_data")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("CircleShape2D_basic")

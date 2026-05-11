@@ -13,6 +13,8 @@ var refresh_cost: int = 1
 
 func _ready() -> void:
 	GameManager.game_state_changed.connect(_on_state_changed)
+	refresh_btn.pressed.connect(_on_refresh)
+	close_btn.pressed.connect(_on_close)
 	visible = false
 	_setup_item_pool()
 	_setup_weapon_pool()
@@ -101,8 +103,6 @@ func _update_display() -> void:
 		btn.size_flags_horizontal = Control.SIZE_EXPAND
 		items_container.add_child(btn)
 	refresh_btn.text = "Refresh (%d Mat)" % refresh_cost
-	refresh_btn.pressed.connect(_on_refresh)
-	close_btn.pressed.connect(_on_close)
 
 func _weapon_level_text(player: Player, wd: WeaponData) -> String:
 	for w in player.weapons:

@@ -13,7 +13,7 @@ func _on_state_changed(state: GameManager.GameState) -> void:
 	if state == GameManager.GameState.GAME_OVER:
 		visible = true
 		var player = get_tree().get_first_node_in_group("player")
-		if GameManager.current_wave > 20:
+		if GameManager.current_wave >= 20:
 			title_label.text = "VICTORY!"
 		else:
 			title_label.text = "DEFEAT"

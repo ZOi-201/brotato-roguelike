@@ -8,7 +8,7 @@ var player: Player
 var bullet_scene: PackedScene = preload("res://scenes/projectiles/Bullet.tscn")
 
 func _ready() -> void:
-	player = get_parent().get_parent() as Player
+	player = get_parent() as Player
 
 func _process(delta: float) -> void:
 	cooldown_timer -= delta
