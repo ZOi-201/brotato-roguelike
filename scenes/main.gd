@@ -5,6 +5,8 @@ extends Node2D
 
 var enemy_scenes = {
 	"basic": preload("res://scenes/enemies/BasicEnemy.tscn"),
+	"charger": preload("res://scenes/enemies/ChargerEnemy.tscn"),
+	"ranged": preload("res://scenes/enemies/RangedEnemy.tscn"),
 }
 
 func _ready() -> void:
@@ -29,11 +31,18 @@ func _process(_delta: float) -> void:
 		GameManager.spawn_timer = GameManager.spawn_interval
 
 func spawn_enemy() -> void:
+	if GameManager.current_wave == 20 and GameManager.enemies_spawned == 0:
+		_spawn_boss()
+		return
 	var pos = GameManager.get_random_spawn_position()
 	var enemy_type = "basic"
 	var is_elite = false
 	if GameManager.current_wave in [5, 10, 15] and randf() < 0.3:
 		is_elite = true
+	if GameManager.current_wave >= 15 and randf() < 0.2:
+		enemy_type = "ranged" if randf() < 0.5 else "charger"
+	elif GameManager.current_wave >= 5 and randf() < 0.3:
+		enemy_type = "charger" if randf() < 0.6 else "ranged"
 	var enemy = enemy_scenes[enemy_type].instantiate()
 	enemy.global_position = pos
 	if is_elite:
@@ -42,6 +51,21 @@ func spawn_enemy() -> void:
 		enemy.scale = Vector2(1.5, 1.5)
 	add_child(enemy)
 	GameManager.enemies_spawned += 1
+
+func _spawn_boss() -> void:
+	var boss = enemy_scenes["basic"].instantiate()
+	boss.enemy_data = _create_boss_data()
+	boss.global_position = Vector2(512, 384)
+	boss.scale = Vector2(3, 3)
+	add_child(boss)
+	GameManager.enemies_spawned += 1
+
+func _create_boss_data() -> EnemyData:
+	var bd = EnemyData.new()
+	bd.enemy_name = "Boss"; bd.max_hp = 500.0; bd.speed = 60.0
+	bd.damage = 25; bd.xp_reward = 100.0; bd.material_drop_chance = 1.0
+	bd.color = Color.RED; bd.size = 36.0; bd.is_boss = true
+	return bd
 
 func _on_game_state_changed(state: GameManager.GameState) -> void:
 	pass

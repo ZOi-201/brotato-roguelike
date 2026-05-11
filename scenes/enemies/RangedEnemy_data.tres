@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="EnemyData" load_steps=2 format=3 uid="uid://rangedenemydata001"]
+
+[ext_resource type="Script" path="res://scripts/resources/EnemyData.gd" id="1_enemydata"]
+
+[resource]
+script = ExtResource("1_enemydata")
+enemy_name = "Sniper"
+max_hp = 25.0
+speed = 60.0
+damage = 10
+xp_reward = 10.0
+material_drop_chance = 0.3
+color = Color(0.7, 0, 1, 1)
+size = 14.0
+is_elite = false
+is_boss = false
