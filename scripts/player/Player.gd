@@ -9,16 +9,23 @@ var items: Array[ItemData] = []
 var _last_hp: float
 var _invincible_timer: float = 0.0
 var _flash_timer: float = 0.08
+var _facing_right: bool = true
 
 func _ready() -> void:
 	add_to_group("player")
 	stats.hp_changed.connect(_on_hp_changed)
 	stats.died.connect(_on_died)
 	_last_hp = stats.hp
+	for child in get_children():
+		if child is ColorRect:
+			child.queue_free()
+	queue_redraw()
 
 func _physics_process(delta: float) -> void:
 	var input_dir = Input.get_vector("move_left", "move_right", "move_up", "move_down")
 	velocity = input_dir * stats.speed
+	if input_dir.x != 0:
+		_facing_right = input_dir.x > 0
 	move_and_slide()
 
 func _process(delta: float) -> void:
@@ -68,6 +75,21 @@ func _trigger_camera_shake() -> void:
 	var main = get_parent()
 	if main.has_method("camera_shake"):
 		main.camera_shake()
+
+func _draw() -> void:
+	var gun_offset_x = 14 if _facing_right else -14
+	# Body
+	draw_circle(Vector2.ZERO, 14, Color(0.27, 0.53, 1))
+	draw_circle(Vector2(0, 3), 10, Color(0.4, 0.65, 1))
+	# Eyes
+	draw_circle(Vector2(-4, -4), 3, Color.WHITE)
+	draw_circle(Vector2(4, -4), 3, Color.WHITE)
+	var pupil_dir = 1 if _facing_right else -1
+	draw_circle(Vector2(-4 + pupil_dir, -4), 1.5, Color.BLACK)
+	draw_circle(Vector2(4 + pupil_dir, -4), 1.5, Color.BLACK)
+	# Gun
+	draw_rect(Rect2(gun_offset_x - (2 if _facing_right else -8), -3, 10, 5), Color(0.8, 0.8, 0.8))
+	draw_circle(Vector2(gun_offset_x + (8 if _facing_right else -6), -0.5), 2, Color.WHITE, false, 1)
 
 func _on_died() -> void:
 	GameManager.change_state(GameManager.GameState.GAME_OVER)

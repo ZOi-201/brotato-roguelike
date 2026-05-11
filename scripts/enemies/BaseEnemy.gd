@@ -15,11 +15,19 @@ func _ready() -> void:
 	_setup_visual()
 
 func _setup_visual() -> void:
-	var shape = ColorRect.new()
-	shape.size = Vector2(enemy_data.size * 2, enemy_data.size * 2)
-	shape.color = enemy_data.color
-	shape.position = -shape.size / 2
-	add_child(shape)
+	queue_redraw()
+
+func _draw() -> void:
+	_draw_enemy_shape()
+
+func _draw_enemy_shape() -> void:
+	var s = enemy_data.size
+	var c = enemy_data.color
+	draw_circle(Vector2.ZERO, s, c)
+	draw_circle(Vector2(-s * 0.3, -s * 0.3), 1.5, Color.WHITE)
+	draw_circle(Vector2(s * 0.3, -s * 0.3), 1.5, Color.WHITE)
+	draw_circle(Vector2(-s * 0.5, -s * 0.8), s * 0.25, c.darkened(0.3))
+	draw_circle(Vector2(s * 0.5, -s * 0.8), s * 0.25, c.darkened(0.3))
 
 func _physics_process(_delta: float) -> void:
 	player = get_tree().get_first_node_in_group("player") as Player
@@ -39,15 +47,12 @@ func take_damage(amount: float) -> void:
 		die()
 
 func _flash_hit() -> void:
-	for child in get_children():
-		if child is ColorRect:
-			if flash_tween and flash_tween.is_running():
-				flash_tween.kill()
-			child.modulate = Color.WHITE
-			flash_tween = create_tween()
-			flash_tween.tween_property(child, "modulate", Color.WHITE, 0.05)
-			flash_tween.tween_property(child, "modulate", Color(1, 1, 1, 1), 0.1)
-			break
+	if flash_tween and flash_tween.is_running():
+		flash_tween.kill()
+	modulate = Color.WHITE
+	flash_tween = create_tween()
+	flash_tween.tween_property(self, "modulate", Color.WHITE, 0.05)
+	flash_tween.tween_property(self, "modulate", Color(1, 1, 1, 1), 0.1)
 
 func die() -> void:
 	_spawn_death_particles()

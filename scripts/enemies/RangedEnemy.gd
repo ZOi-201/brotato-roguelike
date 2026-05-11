@@ -1,5 +1,14 @@
 extends BaseEnemy
 
+func _draw_enemy_shape() -> void:
+	var s = enemy_data.size
+	var c = enemy_data.color
+	draw_rect(Rect2(-s, -s, s * 2, s * 2), c)
+	draw_rect(Rect2(s * 0.5, -3, s, 6), c.lightened(0.2))
+	draw_rect(Rect2(-s * 0.7, -s * 0.7, s * 1.4, s * 1.4), Color.WHITE, false, 1.0)
+	draw_line(Vector2(-s * 0.4, 0), Vector2(s * 0.4, 0), Color.BLACK, 1)
+	draw_line(Vector2(0, -s * 0.4), Vector2(0, s * 0.4), Color.BLACK, 1)
+
 var shoot_cooldown: float = 0.0
 var preferred_distance: float = 200.0
 
