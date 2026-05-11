@@ -2,28 +2,51 @@
 class_name LevelUpUI
 extends CanvasLayer
 
-@onready var options_container: VBoxContainer = $Panel/VBox
+@onready var options_container: HBoxContainer = $Panel/VBox/HBox
 
 var stat_options: Dictionary = {
-	"max_hp": {"label": "Max HP", "amount": 5.0, "max_level": 999},
-	"hp_regen": {"label": "HP Regen", "amount": 1.0, "max_level": 10},
-	"damage_mult": {"label": "Damage %", "amount": 0.05, "max_level": 999},
-	"attack_speed_mult": {"label": "Attack Speed %", "amount": 0.05, "max_level": 999},
-	"speed": {"label": "Speed", "amount": 3.0, "max_level": 10},
-	"dodge": {"label": "Dodge", "amount": 0.03, "max_level": 20},
-	"armor": {"label": "Armor", "amount": 1.0, "max_level": 999},
-	"luck": {"label": "Luck", "amount": 3.0, "max_level": 999},
-	"harvesting": {"label": "Harvesting", "amount": 3.0, "max_level": 999},
+	"max_hp":          {"label": "Max HP",       "icon": "♥",  "color": Color(1, 0.2, 0.2)},
+	"hp_regen":        {"label": "HP Regen",     "icon": "♻",  "color": Color(1, 0.5, 0.5)},
+	"damage_mult":     {"label": "Damage",       "icon": "⚔",  "color": Color(1, 0.5, 0)},
+	"attack_speed_mult":{"label":"Attack Speed", "icon": "⚡",  "color": Color(1, 0.7, 0)},
+	"speed":           {"label": "Speed",        "icon": "»",  "color": Color(0.3, 0.6, 1)},
+	"dodge":           {"label": "Dodge",        "icon": "◎",  "color": Color(0.4, 0.8, 1)},
+	"armor":           {"label": "Armor",        "icon": "▣",  "color": Color(0.6, 0.6, 0.65)},
+	"luck":            {"label": "Luck",         "icon": "✦",  "color": Color(0.3, 1, 0.4)},
+	"harvesting":      {"label": "Harvesting",   "icon": "✦",  "color": Color(0.5, 1, 0.3)},
+}
+var stat_amounts: Dictionary = {
+	"max_hp": 5.0, "hp_regen": 1.0, "damage_mult": 0.05,
+	"attack_speed_mult": 0.05, "speed": 3.0, "dodge": 0.03,
+	"armor": 1.0, "luck": 3.0, "harvesting": 3.0,
+}
+var stat_max: Dictionary = {
+	"hp_regen": 10, "speed": 10, "dodge": 20,
 }
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
+	_style_panel()
 	GameManager.game_state_changed.connect(_on_state_changed)
 	visible = false
+
+func _style_panel() -> void:
+	var panel = $Panel
+	var style = StyleBoxFlat.new()
+	style.bg_color = Color(0.08, 0.08, 0.12, 0.95)
+	style.border_width_left = 2; style.border_width_right = 2
+	style.border_width_top = 2; style.border_width_bottom = 2
+	style.border_color = Color(0.4, 0.4, 0.6)
+	style.corner_radius_top_left = 12; style.corner_radius_top_right = 12
+	style.corner_radius_bottom_left = 12; style.corner_radius_bottom_right = 12
+	style.content_margin_left = 16; style.content_margin_right = 16
+	style.content_margin_top = 12; style.content_margin_bottom = 12
+	panel.add_theme_stylebox_override("panel", style)
 
 func _on_state_changed(state: GameManager.GameState) -> void:
 	if state == GameManager.GameState.LEVEL_UP:
 		show_options()
+		_animate_in()
 	else:
 		visible = false
 
@@ -36,8 +59,8 @@ func show_options() -> void:
 		return
 	var available = []
 	for stat in stat_options.keys():
-		var info = stat_options[stat]
-		if player.stats.upgrade_levels.get(stat, 0) >= info["max_level"]:
+		var max_lvl = stat_max.get(stat, 999)
+		if player.stats.upgrade_levels.get(stat, 0) >= max_lvl:
 			continue
 		available.append(stat)
 	available.shuffle()
@@ -45,17 +68,73 @@ func show_options() -> void:
 	for i in range(count):
 		var stat = available[i]
 		var info = stat_options[stat]
-		var btn = Button.new()
-		btn.text = "%s  +%s  (Lv.%d)" % [info["label"], str(info["amount"]), player.stats.upgrade_levels.get(stat, 0) + 1]
-		btn.pressed.connect(func(): _select(stat, info))
-		options_container.add_child(btn)
+		var amount = stat_amounts[stat]
+		var lvl = player.stats.upgrade_levels.get(stat, 0)
+		var card = _create_card(stat, info, amount, lvl)
+		options_container.add_child(card)
 
-func _select(stat: String, info: Dictionary) -> void:
+func _create_card(stat: String, info: Dictionary, amount: float, current_lvl: int) -> Control:
+	var card = Panel.new()
+	card.custom_minimum_size = Vector2(160, 100)
+	card.size_flags_horizontal = Control.SIZE_EXPAND
+	var card_style = StyleBoxFlat.new()
+	card_style.bg_color = Color(0.12, 0.12, 0.18, 1)
+	card_style.border_width_left = 2; card_style.border_width_right = 2
+	card_style.border_width_top = 2; card_style.border_width_bottom = 2
+	card_style.border_color = info["color"].darkened(0.3)
+	card_style.corner_radius_top_left = 8; card_style.corner_radius_top_right = 8
+	card_style.corner_radius_bottom_left = 8; card_style.corner_radius_bottom_right = 8
+	card.add_theme_stylebox_override("panel", card_style)
+
+	var vbox = VBoxContainer.new()
+	vbox.add_theme_constant_override("separation", 4)
+	vbox.anchors_preset = Control.PRESET_FULL_RECT
+	vbox.offset_left = 8; vbox.offset_top = 8; vbox.offset_right = -8; vbox.offset_bottom = -8
+
+	var icon_label = Label.new()
+	icon_label.text = info["icon"]
+	icon_label.add_theme_color_override("font_color", info["color"])
+	icon_label.add_theme_font_size_override("font_size", 24)
+	icon_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+
+	var name_label = Label.new()
+	name_label.text = info["label"]
+	name_label.add_theme_color_override("font_color", Color(0.9, 0.9, 0.9))
+	name_label.add_theme_font_size_override("font_size", 14)
+	name_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+
+	var value_label = Label.new()
+	var amt_str = "+%.0f" % amount if amount >= 1 else "+%d%%" % int(amount * 100)
+	value_label.text = "%s  Lv.%d→%d" % [amt_str, current_lvl, current_lvl + 1]
+	value_label.add_theme_color_override("font_color", info["color"].lightened(0.2))
+	value_label.add_theme_font_size_override("font_size", 13)
+	value_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+
+	vbox.add_child(icon_label)
+	vbox.add_child(name_label)
+	vbox.add_child(value_label)
+	card.add_child(vbox)
+
+	# Click handler
+	card.gui_input.connect(func(event: InputEvent):
+		if event is InputEventMouseButton and event.pressed:
+			_select(stat)
+	)
+	return card
+
+func _select(stat: String) -> void:
 	var player = get_tree().get_first_node_in_group("player")
 	if not player:
 		return
-	player.stats.apply_level_up(stat, info["amount"])
+	var amount = stat_amounts[stat]
+	player.stats.apply_level_up(stat, amount)
 	if player.stats.check_level_up():
 		show_options()
+		_animate_in()
 	else:
 		GameManager.change_state(GameManager.GameState.PLAYING)
+
+func _animate_in() -> void:
+	modulate.a = 0
+	var tween = create_tween()
+	tween.tween_property(self, "modulate:a", 1.0, 0.15)
