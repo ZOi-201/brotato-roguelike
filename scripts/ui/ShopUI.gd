@@ -102,16 +102,16 @@ func _setup_weapon_pool() -> void:
 func _on_state_changed(state: GameManager.GameState) -> void:
 	if state == GameManager.GameState.SHOP:
 		generate_offers()
-		show()
+		_show_with_fade()
 	else:
 		visible = false
 
-func show() -> void:
+func _show_with_fade() -> void:
 	visible = true
 	material_display.text = "Materials: %d" % get_tree().get_first_node_in_group("player").stats.materials
-	modulate.a = 0
+	$ColorRect.modulate.a = 0
 	var tween = create_tween()
-	tween.tween_property(self, "modulate:a", 1.0, 0.15)
+	tween.tween_property($ColorRect, "modulate:a", 1.0, 0.15)
 
 func generate_offers() -> void:
 	current_offers.clear()

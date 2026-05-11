@@ -48,9 +48,9 @@ func _on_state_changed(state: GameManager.GameState) -> void:
 			GameManager.current_wave, GameManager.total_kills,
 			player.stats.materials if player else 0
 		]
-		modulate.a = 0
+		$ColorRect.modulate.a = 0
 		var tween = create_tween()
-		tween.tween_property(self, "modulate:a", 1.0, 0.3)
+		tween.tween_property($ColorRect, "modulate:a", 1.0, 0.3)
 
 func _on_restart_pressed() -> void:
 	get_tree().paused = false

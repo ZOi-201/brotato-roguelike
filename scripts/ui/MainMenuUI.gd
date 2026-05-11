@@ -7,10 +7,10 @@ func _ready() -> void:
 	var start_btn = $Panel/VBox/StartBtn
 	start_btn.pressed.connect(func():
 		var tween = create_tween()
-		tween.tween_property(self, "modulate:a", 0.0, 0.3)
+		tween.tween_property($Panel, "modulate:a", 0.0, 0.3)
 		tween.finished.connect(func():
 			visible = false
-			modulate.a = 1.0
+			$Panel.modulate.a = 1.0
 			GameManager.start_game()
 		)
 	)

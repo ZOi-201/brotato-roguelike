@@ -135,6 +135,6 @@ func _select(stat: String) -> void:
 		GameManager.change_state(GameManager.GameState.PLAYING)
 
 func _animate_in() -> void:
-	modulate.a = 0
+	$ColorRect.modulate.a = 0
 	var tween = create_tween()
-	tween.tween_property(self, "modulate:a", 1.0, 0.15)
+	tween.tween_property($ColorRect, "modulate:a", 1.0, 0.15)
