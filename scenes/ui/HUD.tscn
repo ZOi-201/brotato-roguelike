@@ -1,0 +1,50 @@
+[gd_scene load_steps=2 format=3 uid="uid://hud001"]
+
+[ext_resource type="Script" path="res://scripts/ui/HUD.gd" id="1_hud"]
+
+[node name="HUD" type="CanvasLayer"]
+script = ExtResource("1_hud")
+
+[node name="Panel" type="Panel" parent="."]
+offset_left = 0.0
+offset_top = 0.0
+offset_right = 1024.0
+offset_bottom = 40.0
+
+[node name="HBox" type="HBoxContainer" parent="Panel"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="HPBar" type="ProgressBar" parent="Panel/HBox"]
+custom_minimum_size = Vector2(150, 20)
+max_value = 100.0
+value = 100.0
+
+[node name="HP_Label" type="Label" parent="Panel/HBox/HPBar"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "100 / 100"
+horizontal_alignment = 1
+
+[node name="XPBar" type="ProgressBar" parent="Panel/HBox"]
+custom_minimum_size = Vector2(150, 20)
+max_value = 50.0
+value = 0.0
+
+[node name="WaveLabel" type="Label" parent="Panel/HBox"]
+text = "Wave: 1/20"
+
+[node name="TimerLabel" type="Label" parent="Panel/HBox"]
+text = "22 s"
+
+[node name="MaterialLabel" type="Label" parent="Panel/HBox"]
+text = "Mat: 0"
+
+[node name="KillLabel" type="Label" parent="Panel/HBox"]
+text = "Kills: 0"
