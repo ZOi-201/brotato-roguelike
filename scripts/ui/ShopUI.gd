@@ -42,12 +42,32 @@ func _setup_item_pool() -> void:
 		all_items.append(item)
 
 func _setup_weapon_pool() -> void:
+	# Pistol
 	var pistoldata = WeaponData.new()
-	pistoldata.weapon_name = "Pistol"
-	pistoldata.base_damage = 10.0; pistoldata.attack_speed = 1.0
-	pistoldata.range = 300.0; pistoldata.projectile_speed = 400.0
-	pistoldata.projectile_color = Color.YELLOW
+	pistoldata.weapon_name = "Pistol"; pistoldata.base_damage = 10.0; pistoldata.attack_speed = 1.0
+	pistoldata.range = 300.0; pistoldata.projectile_speed = 400.0; pistoldata.projectile_color = Color.YELLOW
 	all_weapons.append(pistoldata)
+	# Shotgun
+	var sg = WeaponData.new()
+	sg.weapon_name = "Shotgun"; sg.base_damage = 6.0; sg.attack_speed = 0.6
+	sg.range = 200.0; sg.projectile_speed = 350.0; sg.projectile_color = Color.ORANGE
+	sg.projectile_count = 3; sg.spread_angle = 30.0
+	all_weapons.append(sg)
+	# Staff
+	var st = WeaponData.new()
+	st.weapon_name = "Staff"; st.base_damage = 15.0; st.attack_speed = 0.5
+	st.range = 350.0; st.projectile_speed = 250.0; st.projectile_color = Color.PURPLE; st.piercing = true
+	all_weapons.append(st)
+	# Dagger
+	var dg = WeaponData.new()
+	dg.weapon_name = "Dagger"; dg.base_damage = 20.0; dg.attack_speed = 2.0
+	dg.range = 80.0; dg.projectile_speed = 600.0; dg.projectile_color = Color.CYAN
+	all_weapons.append(dg)
+	# Slingshot
+	var sl = WeaponData.new()
+	sl.weapon_name = "Slingshot"; sl.base_damage = 8.0; sl.attack_speed = 0.8
+	sl.range = 280.0; sl.projectile_speed = 380.0; sl.projectile_color = Color.GREEN_YELLOW; sl.bounce_count = 1
+	all_weapons.append(sl)
 
 func _on_state_changed(state: GameManager.GameState) -> void:
 	if state == GameManager.GameState.SHOP:
@@ -144,11 +164,27 @@ func _instantiate_weapon(wd: WeaponData) -> BaseWeapon:
 			data.range = 300.0; data.projectile_speed = 400.0; data.projectile_color = Color.YELLOW
 			data.projectile_count = 1
 			var p = Pistol.new(); p.weapon_data = data; return p
+		"Shotgun":
+			data.weapon_name = "Shotgun"; data.base_damage = 6.0; data.attack_speed = 0.6
+			data.range = 200.0; data.projectile_speed = 350.0; data.projectile_color = Color.ORANGE
+			data.projectile_count = 3; data.spread_angle = 30.0
+			var s = Shotgun.new(); s.weapon_data = data; return s
+		"Staff":
+			data.weapon_name = "Staff"; data.base_damage = 15.0; data.attack_speed = 0.5
+			data.range = 350.0; data.projectile_speed = 250.0; data.projectile_color = Color.PURPLE
+			data.piercing = true
+			var st = Staff.new(); st.weapon_data = data; return st
+		"Dagger":
+			data.weapon_name = "Dagger"; data.base_damage = 20.0; data.attack_speed = 2.0
+			data.range = 80.0; data.projectile_speed = 600.0; data.projectile_color = Color.CYAN
+			var d = Dagger.new(); d.weapon_data = data; return d
+		"Slingshot":
+			data.weapon_name = "Slingshot"; data.base_damage = 8.0; data.attack_speed = 0.8
+			data.range = 280.0; data.projectile_speed = 380.0; data.projectile_color = Color.GREEN_YELLOW
+			data.bounce_count = 1
+			var sl = Slingshot.new(); sl.weapon_data = data; return sl
 		_:
-			var p = Pistol.new()
-			data.weapon_name = "Pistol"; data.base_damage = 10.0; data.attack_speed = 1.0
-			data.range = 300.0; data.projectile_speed = 400.0; data.projectile_color = Color.YELLOW
-			p.weapon_data = data; return p
+			return Pistol.new()
 
 func _on_refresh() -> void:
 	var player = get_tree().get_first_node_in_group("player")
