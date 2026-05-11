@@ -27,6 +27,7 @@ var xp: float = 0.0
 var xp_to_next: float = 50.0
 var kills: int = 0
 var materials: int = 0
+var invincible: bool = false
 
 # upgrade level tracking
 var upgrade_levels: Dictionary = {
@@ -36,6 +37,8 @@ var upgrade_levels: Dictionary = {
 }
 
 func take_damage(amount: int) -> void:
+	if invincible:
+		return
 	if randf() * 100 < dodge:
 		return
 	var reduced = maxi(1, amount - armor)

@@ -2,6 +2,7 @@
 extends Node2D
 
 @onready var player = $Player
+@onready var camera: Camera2D = $Camera2D
 
 var enemy_scenes = {
 	"basic": preload("res://scenes/enemies/BasicEnemy.tscn"),
@@ -137,3 +138,11 @@ func _magnet_drops(delta: float) -> void:
 			var dist = player.global_position.distance_to(drop.global_position)
 			var speed = clampf(500.0 / maxf(dist, 1), 100, 500)
 			drop.global_position += dir * speed * delta
+
+func camera_shake() -> void:
+	var tween = create_tween()
+	tween.tween_property(camera, "offset", Vector2(6, 0), 0.03)
+	tween.tween_property(camera, "offset", Vector2(-5, 2), 0.03)
+	tween.tween_property(camera, "offset", Vector2(3, -3), 0.03)
+	tween.tween_property(camera, "offset", Vector2(-2, 1), 0.03)
+	tween.tween_property(camera, "offset", Vector2(0, 0), 0.03)

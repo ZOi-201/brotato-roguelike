@@ -33,6 +33,7 @@ func _on_body_entered(body: Node2D) -> void:
 	if body in hit_enemies:
 		return
 	body.take_damage(damage)
+	_spawn_damage_number(body.global_position, damage)
 	hit_enemies.append(body)
 	if not piercing and bounces <= 0:
 		queue_free()
@@ -44,6 +45,21 @@ func _on_body_entered(body: Node2D) -> void:
 			look_at(global_position + direction)
 		else:
 			queue_free()
+
+func _spawn_damage_number(pos: Vector2, amount: float) -> void:
+	var label = Label.new()
+	label.text = str(int(amount))
+	label.add_theme_color_override("font_color", Color.WHITE)
+	label.add_theme_font_size_override("font_size", 16)
+	label.position = pos + Vector2(randf_range(-10, 10), -20)
+	label.scale = Vector2.ZERO
+	get_tree().current_scene.add_child(label)
+	var tween = label.create_tween()
+	tween.tween_property(label, "scale", Vector2(1.2, 1.2), 0.1)
+	tween.tween_property(label, "scale", Vector2(1, 1), 0.1)
+	tween.parallel().tween_property(label, "position:y", label.position.y - 30, 0.5)
+	tween.parallel().tween_property(label, "modulate:a", 0.0, 0.4).set_delay(0.2)
+	tween.finished.connect(label.queue_free)
 
 func _find_nearest_enemy_except(exclude: Node2D) -> Node2D:
 	var enemies = get_tree().get_nodes_in_group("enemies")
