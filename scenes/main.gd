@@ -73,6 +73,9 @@ func _on_game_state_changed(state: GameManager.GameState) -> void:
 	pass
 
 func _on_enemy_killed(ed: EnemyData, pos: Vector2, is_elite: bool, is_boss: bool) -> void:
+	call_deferred("_spawn_drops_deferred", ed, pos, is_elite, is_boss)
+
+func _spawn_drops_deferred(ed: EnemyData, pos: Vector2, is_elite: bool, is_boss: bool) -> void:
 	_spawn_xp_drop(pos, ed.xp_reward)
 	if randf() < ed.material_drop_chance or is_elite or is_boss:
 		_spawn_material_drop(pos, 1 + int(is_elite) * 2 + int(is_boss) * 5)
