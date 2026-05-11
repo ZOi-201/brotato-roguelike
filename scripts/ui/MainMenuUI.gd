@@ -2,6 +2,7 @@ class_name MainMenuUI
 extends CanvasLayer
 
 func _ready() -> void:
+	process_mode = Node.PROCESS_MODE_ALWAYS
 	var start_btn = $Panel/VBox/StartBtn
 	start_btn.pressed.connect(func():
 		visible = false

@@ -17,6 +17,7 @@ var stat_options: Dictionary = {
 }
 
 func _ready() -> void:
+	process_mode = Node.PROCESS_MODE_ALWAYS
 	GameManager.game_state_changed.connect(_on_state_changed)
 	visible = false
 

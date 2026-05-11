@@ -6,6 +6,7 @@ extends CanvasLayer
 @onready var restart_btn: Button = $Panel/VBox/RestartBtn
 
 func _ready() -> void:
+	process_mode = Node.PROCESS_MODE_ALWAYS
 	GameManager.game_state_changed.connect(_on_state_changed)
 	restart_btn.pressed.connect(_on_restart_pressed)
 	visible = false

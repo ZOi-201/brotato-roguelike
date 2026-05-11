@@ -12,6 +12,7 @@ var all_weapons: Array[WeaponData] = []
 var refresh_cost: int = 1
 
 func _ready() -> void:
+	process_mode = Node.PROCESS_MODE_ALWAYS
 	GameManager.game_state_changed.connect(_on_state_changed)
 	refresh_btn.pressed.connect(_on_refresh)
 	close_btn.pressed.connect(_on_close)

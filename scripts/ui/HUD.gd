@@ -11,6 +11,7 @@ extends CanvasLayer
 @onready var kill_label: Label = $Panel/HBox/KillLabel
 
 func _ready() -> void:
+	process_mode = Node.PROCESS_MODE_ALWAYS
 	var player = get_tree().get_first_node_in_group("player")
 	if player:
 		player.stats.hp_changed.connect(_on_hp_changed)
