@@ -29,6 +29,7 @@ func _process(_delta: float) -> void:
 	if GameManager.spawn_timer <= 0 and GameManager.enemies_spawned < GameManager.enemies_to_spawn:
 		spawn_enemy()
 		GameManager.spawn_timer = GameManager.spawn_interval
+	_magnet_drops(_delta)
 
 func spawn_enemy() -> void:
 	if GameManager.current_wave == 20 and GameManager.enemies_spawned == 0:
@@ -121,3 +122,18 @@ func _collect_xp(drop: Area2D) -> void:
 func _collect_material(drop: Area2D) -> void:
 	player.stats.materials += drop.get_meta("material_amount", 1)
 	drop.queue_free()
+
+func _magnet_drops(delta: float) -> void:
+	if not player:
+		return
+	for group_name in ["xp_drops", "material_drops"]:
+		for drop in get_tree().get_nodes_in_group(group_name):
+			if not drop.has_meta("spawn_time"):
+				drop.set_meta("spawn_time", Time.get_ticks_msec() / 1000.0)
+			var age = Time.get_ticks_msec() / 1000.0 - drop.get_meta("spawn_time")
+			if age < 0.5:
+				continue
+			var dir = (player.global_position - drop.global_position).normalized()
+			var dist = player.global_position.distance_to(drop.global_position)
+			var speed = clampf(500.0 / maxf(dist, 1), 100, 500)
+			drop.global_position += dir * speed * delta
