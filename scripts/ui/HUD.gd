@@ -3,17 +3,17 @@
 class_name HUD
 extends CanvasLayer
 
-@onready var hp_bar: ProgressBar = $Panel/Left/HPBar
-@onready var hp_label: Label = $Panel/Left/HPBar/HP_Label
-@onready var xp_bar: ProgressBar = $Panel/Right/XPBar
-@onready var wave_label: Label = $Panel/Center/WaveLabel
-@onready var timer_label: Label = $Panel/Center/TimerLabel
-@onready var material_label: Label = $Panel/Right/GoldLabel
-@onready var kill_label: Label = $Panel/Right/KillLabel
+@onready var hp_bar: ProgressBar = $Panel/HBox/Left/HPBar
+@onready var hp_label: Label = $Panel/HBox/Left/HPBar/HP_Label
+@onready var xp_bar: ProgressBar = $Panel/HBox/Right/XPBar
+@onready var wave_label: Label = $Panel/HBox/Center/WaveLabel
+@onready var timer_label: Label = $Panel/HBox/Center/TimerLabel
+@onready var material_label: Label = $Panel/HBox/Right/GoldLabel
+@onready var kill_label: Label = $Panel/HBox/Right/KillLabel
 @onready var panel: Panel = $Panel
-@onready var left_section: HBoxContainer = $Panel/Left
-@onready var center_section: VBoxContainer = $Panel/Center
-@onready var right_section: HBoxContainer = $Panel/Right
+@onready var left_section: HBoxContainer = $Panel/HBox/Left
+@onready var center_section: VBoxContainer = $Panel/HBox/Center
+@onready var right_section: HBoxContainer = $Panel/HBox/Right
 
 var _target_hp: float = 100.0
 var _target_xp: float = 0.0
