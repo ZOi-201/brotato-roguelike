@@ -1,29 +1,46 @@
-[gd_scene load_steps=8 format=3 uid="uid://main001"]
+[gd_scene format=3 uid="uid://main001"]
 
-[ext_resource type="Script" path="res://scenes/main.gd" id="1_main"]
+[ext_resource type="Script" uid="uid://8ckv0qvw7sq1" path="res://scenes/main.gd" id="1_main"]
 [ext_resource type="PackedScene" uid="uid://player001" path="res://scenes/player/Player.tscn" id="2_player"]
 [ext_resource type="PackedScene" uid="uid://hud001" path="res://scenes/ui/HUD.tscn" id="3_hud"]
 [ext_resource type="PackedScene" uid="uid://shopui001" path="res://scenes/ui/ShopUI.tscn" id="4_shop"]
 [ext_resource type="PackedScene" uid="uid://levelupui001" path="res://scenes/ui/LevelUpUI.tscn" id="5_levelup"]
-[ext_resource type="PackedScene" uid="uid://gameoverui001" path="res://scenes/ui/GameOverUI.tscn" id="6_gameover"]
-[ext_resource type="PackedScene" uid="uid://mainmenuui001" path="res://scenes/ui/MainMenuUI.tscn" id="7_menu"]
+[ext_resource type="PackedScene" uid="uid://ce7i3thjbb5aa" path="res://scenes/ui/GameOverUI.tscn" id="6_gameover"]
+[ext_resource type="PackedScene" uid="uid://oa1t7v35weqq" path="res://scenes/ui/MainMenuUI.tscn" id="7_menu"]
 
-[node name="Main" type="Node2D"]
+[node name="Main" type="Node2D" unique_id=1628642802]
 script = ExtResource("1_main")
 
-[node name="Player" parent="." instance=ExtResource("2_player")]
+[node name="Player" parent="." unique_id=393378572 instance=ExtResource("2_player")]
 position = Vector2(512, 384)
 
-[node name="Camera2D" type="Camera2D" parent="."]
-current = true
+[node name="Camera2D" type="Camera2D" parent="." unique_id=1756180550]
 position = Vector2(512, 384)
 
-[node name="HUD" parent="." instance=ExtResource("3_hud")]
+[node name="HUD" parent="." unique_id=2081764526 instance=ExtResource("3_hud")]
 
-[node name="ShopUI" parent="." instance=ExtResource("4_shop")]
+[node name="ShopUI" parent="." unique_id=444261267 instance=ExtResource("4_shop")]
 
-[node name="LevelUpUI" parent="." instance=ExtResource("5_levelup")]
+[node name="LevelUpUI" parent="." unique_id=1552751743 instance=ExtResource("5_levelup")]
 
-[node name="GameOverUI" parent="." instance=ExtResource("6_gameover")]
+[node name="GameOverUI" parent="." unique_id=736717280 instance=ExtResource("6_gameover")]
 
-[node name="MainMenuUI" parent="." instance=ExtResource("7_menu")]
+[node name="MainMenuUI" parent="." unique_id=313272364 instance=ExtResource("7_menu")]
+
+[node name="WaveLabel" type="Label" parent="." unique_id=649309651]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 262.0
+offset_top = 334.0
+offset_right = 500.0
+offset_bottom = 60.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Vignette" type="ColorRect" parent="." unique_id=764422149]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
