@@ -43,8 +43,8 @@ func _process(_delta: float) -> void:
 		return
 	xp_bar.max_value = player.stats.xp_to_next
 	xp_bar.value = player.stats.xp
-	material_label.text = "Mat: %d" % player.stats.materials
-	kill_label.text = "Kills: %d" % GameManager.total_kills
+	material_label.text = "金币: %d" % player.stats.materials
+	kill_label.text = "击杀: %d" % GameManager.total_kills
 
 func _on_hp_changed(current: float, max_hp: float) -> void:
 	hp_bar.max_value = max_hp
@@ -55,10 +55,10 @@ func _on_hp_changed(current: float, max_hp: float) -> void:
 	hp_bar.add_theme_color_override("font_color", c)
 
 func _on_wave_changed(wave: int) -> void:
-	wave_label.text = "Wave: %d/20" % wave
+	wave_label.text = "波: %d/20" % wave
 
 func _on_wave_timer(time_left: float) -> void:
-	timer_label.text = "%ds" % int(time_left)
+	timer_label.text = "%d秒" % int(time_left)
 	timer_label.add_theme_color_override("font_color", Color.RED if time_left <= 5 else Color(0.9, 0.9, 0.9))
 
 func _on_state_changed(state: GameManager.GameState) -> void:
