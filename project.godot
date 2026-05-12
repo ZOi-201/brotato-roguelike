@@ -19,6 +19,10 @@ config/icon="res://icon.svg"
 
 GameManager="*res://scripts/systems/GameManager.gd"
 
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/godot_mcp/plugin.cfg")
+
 [input]
 
 move_left={
@@ -53,7 +57,3 @@ move_down={
 [rendering]
 
 rendering_device/driver.windows="d3d12"
-
-[editor_plugins]
-
-enabled=PackedStringArray("res://addons/godot_mcp/plugin.cfg")
