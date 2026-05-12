@@ -76,11 +76,89 @@ func _process(_delta: float) -> void:
 			spawn_enemy()
 		GameManager.spawn_timer = GameManager.spawn_interval * 2.5
 	_magnet_drops(_delta)
+	_spawn_random_items(_delta)
 	_update_vignette()
 	queue_redraw()
 
+func _spawn_random_items(delta: float) -> void:
+	_item_spawn_timer -= delta
+	if _item_spawn_timer <= 0:
+		_item_spawn_timer = randf_range(8.0, 15.0)
+		var pos = GameManager.get_random_spawn_position()
+		var r = randf()
+		if r < 0.35:
+			_spawn_heal_item(pos)
+		elif r < 0.55:
+			_spawn_speed_boost(pos)
+		elif r < 0.75:
+			_spawn_damage_boost(pos)
+		else:
+			_spawn_gold_bonus(pos)
+
+func _spawn_heal_item(pos: Vector2) -> void:
+	_spawn_powerup(pos, Color.RED, "heal")
+
+func _spawn_speed_boost(pos: Vector2) -> void:
+	_spawn_powerup(pos, Color(0.3, 0.6, 1), "speed_boost")
+
+func _spawn_damage_boost(pos: Vector2) -> void:
+	_spawn_powerup(pos, Color(1, 0.5, 0), "damage_boost")
+
+func _spawn_gold_bonus(pos: Vector2) -> void:
+	_spawn_powerup(pos, Color(1, 0.85, 0.2), "gold_bonus")
+
+func _spawn_powerup(pos: Vector2, color: Color, ptype: String) -> void:
+	var drop = Area2D.new()
+	drop.add_to_group("powerups")
+	var cs = CollisionShape2D.new()
+	var circle = CircleShape2D.new()
+	circle.radius = 10
+	cs.shape = circle
+	drop.add_child(cs)
+	var rect = ColorRect.new()
+	rect.size = Vector2(16, 16)
+	rect.color = color
+	rect.position = -rect.size / 2
+	drop.add_child(rect)
+	drop.global_position = pos
+	drop.set_meta("powerup_type", ptype)
+	drop.body_entered.connect(func(b): if b.is_in_group("player"): _collect_powerup(drop))
+	add_child(drop)
+	drop.scale = Vector2(0.3, 0.3)
+	var tween = drop.create_tween()
+	tween.tween_property(drop, "scale", Vector2(1.3, 1.3), 0.1)
+	tween.tween_property(drop, "scale", Vector2(1, 1), 0.05)
+
+func _collect_powerup(drop: Area2D) -> void:
+	var ptype = drop.get_meta("powerup_type", "")
+	match ptype:
+		"heal":
+			player.stats.heal(20)
+		"speed_boost":
+			player.stats.speed += 60
+			_boost_tween("speed_boost")
+		"damage_boost":
+			player.stats.damage_mult += 0.5
+			_boost_tween("damage_boost")
+		"gold_bonus":
+			player.stats.materials += 5
+	SFX.play("pickup_coin", -6.0)
+	drop.queue_free()
+
+var _active_boosts: Dictionary = {}
+
+func _boost_tween(boost_name: String) -> void:
+	await get_tree().create_timer(5.0).timeout
+	match boost_name:
+		"speed_boost":
+			player.stats.speed -= 60
+		"damage_boost":
+			player.stats.damage_mult -= 0.5
+
+var _item_spawn_timer: float = 10.0
+
 func _input(event: InputEvent) -> void:
-	if event.is_action_pressed("ui_accept") and GameManager.current_state == GameManager.GameState.PLAYING:
+	if event.is_action_pressed("shop") and GameManager.current_state == GameManager.GameState.PLAYING:
 		GameManager.change_state(GameManager.GameState.SHOP)
 
 func _update_vignette() -> void:
