@@ -54,9 +54,9 @@ func start_wave() -> void:
 	else:
 		wave_duration = 90.0
 	wave_timer = wave_duration
-	enemies_to_spawn = 8 + current_wave * 2
+	enemies_to_spawn = 15 + current_wave * 3
 	enemies_spawned = 0
-	spawn_interval = maxf(0.3, 1.5 - current_wave * 0.05)
+	spawn_interval = maxf(0.15, 1.0 - current_wave * 0.04)
 	spawn_timer = 0.0
 	wave_changed.emit(current_wave)
 

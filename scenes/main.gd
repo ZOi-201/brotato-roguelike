@@ -71,10 +71,10 @@ func _process(_delta: float) -> void:
 		return
 	GameManager.spawn_timer -= get_process_delta_time()
 	if GameManager.spawn_timer <= 0 and GameManager.enemies_spawned < GameManager.enemies_to_spawn:
-		var burst_count = randi_range(2, min(5, GameManager.enemies_to_spawn - GameManager.enemies_spawned))
+		var burst_count = randi_range(3, min(7, GameManager.enemies_to_spawn - GameManager.enemies_spawned))
 		for _i in range(burst_count):
 			spawn_enemy()
-		GameManager.spawn_timer = GameManager.spawn_interval * 4.0
+		GameManager.spawn_timer = GameManager.spawn_interval * 2.5
 	_magnet_drops(_delta)
 	_update_vignette()
 	queue_redraw()
@@ -250,7 +250,7 @@ func _magnet_drops(delta: float) -> void:
 			if not drop.has_meta("spawn_time"):
 				drop.set_meta("spawn_time", Time.get_ticks_msec() / 1000.0)
 			var age = Time.get_ticks_msec() / 1000.0 - drop.get_meta("spawn_time")
-			if age < 0.1:
+			if age < 0.05:
 				continue
 			var dir = (player.global_position - drop.global_position).normalized()
 			var dist = player.global_position.distance_to(drop.global_position)
