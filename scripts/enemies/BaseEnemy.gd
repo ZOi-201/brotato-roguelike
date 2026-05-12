@@ -94,6 +94,7 @@ func _move_toward_player(_delta: float) -> void:
 func take_damage(amount: float) -> void:
 	hp -= amount
 	_flash_hit()
+	SFX.play("hit", -8.0)
 	queue_redraw()
 	if hp <= 0:
 		die()
@@ -108,6 +109,7 @@ func _flash_hit() -> void:
 
 func die() -> void:
 	_spawn_death_particles()
+	SFX.play("kill", -6.0)
 	GameManager.on_enemy_killed(self)
 	queue_free()
 

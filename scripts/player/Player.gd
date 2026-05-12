@@ -86,6 +86,7 @@ func _start_invincibility() -> void:
 	stats.invincible = true
 	_invincible_timer = 0.5
 	_flash_timer = 0.08
+	SFX.play("player_hit", -4.0)
 
 func _trigger_camera_shake() -> void:
 	var main = get_parent()

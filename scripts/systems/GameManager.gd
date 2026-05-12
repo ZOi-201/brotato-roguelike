@@ -59,6 +59,7 @@ func start_wave() -> void:
 	spawn_interval = maxf(0.15, 1.0 - current_wave * 0.04)
 	spawn_timer = 0.0
 	wave_changed.emit(current_wave)
+	SFX.play("wave_start", -6.0)
 
 func end_wave() -> void:
 	if current_wave >= 20:

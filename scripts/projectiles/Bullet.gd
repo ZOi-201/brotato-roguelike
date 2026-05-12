@@ -13,6 +13,7 @@ var hit_enemies: Array = []
 
 func _ready() -> void:
 	add_to_group("projectiles")
+	SFX.play("shoot", -12.0)
 	body_entered.connect(_on_body_entered)
 	var spr = Sprite2D.new()
 	spr.texture = SpriteAssets.textures.get("bullet")

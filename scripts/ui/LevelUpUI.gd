@@ -45,6 +45,7 @@ func _style_panel() -> void:
 
 func _on_state_changed(state: GameManager.GameState) -> void:
 	if state == GameManager.GameState.LEVEL_UP:
+		SFX.play("level_up", -6.0)
 		show_options()
 		_animate_in()
 	else:

@@ -19,6 +19,7 @@ config/icon="res://icon.svg"
 
 GameManager="*res://scripts/systems/GameManager.gd"
 SpriteAssets="*res://scripts/systems/PixelSpriteGenerator.gd"
+SFX="*res://scripts/systems/SFX.gd"
 
 [editor_plugins]
 

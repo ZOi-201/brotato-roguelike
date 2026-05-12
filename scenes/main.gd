@@ -213,6 +213,7 @@ func _spawn_material_drop(pos: Vector2, amount: int) -> void:
 func _collect_xp(drop: Area2D) -> void:
 	var amount = drop.get_meta("xp_amount", 5.0)
 	player.stats.add_xp(amount)
+	SFX.play("pickup_xp", -10.0)
 	_spawn_collect_particles(drop.global_position, Color.GREEN)
 	if player.stats.check_level_up():
 		GameManager.change_state(GameManager.GameState.LEVEL_UP)
@@ -220,6 +221,7 @@ func _collect_xp(drop: Area2D) -> void:
 
 func _collect_material(drop: Area2D) -> void:
 	player.stats.materials += drop.get_meta("material_amount", 1)
+	SFX.play("pickup_coin", -8.0)
 	_spawn_collect_particles(drop.global_position, Color.YELLOW)
 	drop.queue_free()
 
