@@ -18,36 +18,145 @@ func _create_texture(img: Image) -> ImageTexture:
 	tex.set_image(img)
 	return tex
 
-# --- PLAYER: 32x32 potato character ---
+# --- PLAYER: 32x32 anime girl ---
 func _gen_player() -> ImageTexture:
 	var img = Image.create(32, 32, false, Image.FORMAT_RGBA8)
 	img.fill(Color(0, 0, 0, 0))
-	var brown = Color(0.65, 0.45, 0.25)
-	var dark = Color(0.45, 0.3, 0.15)
-	var light = Color(0.75, 0.55, 0.35)
+	var skin = Color(1, 0.88, 0.78)
+	var skin_dark = Color(0.9, 0.75, 0.65)
+	var hair = Color(1, 0.45, 0.65)
+	var hair_dark = Color(0.8, 0.25, 0.5)
+	var hair_light = Color(1, 0.65, 0.8)
 	var white = Color.WHITE
-	var black = Color.BLACK
-	var grey = Color(0.6, 0.6, 0.6)
-	for y in range(8, 28):
-		var w = 6 + int(sin((y - 8) * PI / 20) * 10)
-		for x in range(16 - w, 16 + w):
-			img.set_pixel(x, y, brown)
-	for y in range(12, 24):
-		var w = 4 + int(sin((y - 12) * PI / 12) * 5)
-		for x in range(16 - w, 16 + w):
-			img.set_pixel(x, y, light)
-	_outline_region(img, 8, 28, brown)
-	img.set_pixel(12, 15, white); img.set_pixel(13, 15, white)
-	img.set_pixel(19, 15, white); img.set_pixel(20, 15, white)
-	img.set_pixel(12, 16, black); img.set_pixel(19, 16, black)
-	for x in range(13, 20):
-		img.set_pixel(x, 19, dark)
-	img.set_pixel(13, 20, dark); img.set_pixel(14, 20, dark)
-	img.set_pixel(17, 20, dark); img.set_pixel(18, 20, dark)
-	for x in range(24, 31):
-		img.set_pixel(x, 17, grey)
-		img.set_pixel(x, 18, grey)
-	img.set_pixel(30, 16, grey); img.set_pixel(30, 19, grey)
+	var black = Color(0.1, 0.05, 0.05)
+	var eye_blue = Color(0.2, 0.5, 1)
+	var eye_dark = Color(0.05, 0.15, 0.4)
+	var dress = Color(0.2, 0.3, 0.6)
+	var dress_light = Color(0.3, 0.45, 0.8)
+	var ribbon = Color(0.95, 0.15, 0.25)
+	var weapon = Color(0.55, 0.55, 0.6)
+	var blush = Color(1, 0.6, 0.65)
+
+	# Hair - back layer (rows 2-22, wide)
+	for y in range(2, 23):
+		var hw = 0
+		if y <= 4: hw = 6
+		elif y <= 14: hw = 8
+		elif y <= 18: hw = 7
+		else: hw = 5
+		for x in range(16 - hw, 16 + hw):
+			if img.get_pixel(x, y).a == 0:
+				img.set_pixel(x, y, hair)
+	# Hair sides flowing down
+	for y in range(14, 24):
+		img.set_pixel(7, y, hair)
+		img.set_pixel(8, y, hair_dark)
+		img.set_pixel(23, y, hair)
+		img.set_pixel(24, y, hair_dark)
+	# Hair highlight (top)
+	for y in range(2, 8):
+		for x in range(13, 18):
+			if img.get_pixel(x, y) == hair:
+				img.set_pixel(x, y, hair_light)
+
+	# Ribbon/Bow (top of head)
+	img.set_pixel(13, 3, ribbon); img.set_pixel(14, 3, ribbon); img.set_pixel(15, 3, ribbon)
+	img.set_pixel(17, 3, ribbon); img.set_pixel(18, 3, ribbon); img.set_pixel(19, 3, ribbon)
+	img.set_pixel(12, 4, ribbon); img.set_pixel(13, 4, ribbon)
+	img.set_pixel(19, 4, ribbon); img.set_pixel(20, 4, ribbon)
+	for x in range(14, 19): img.set_pixel(x, 2, ribbon)
+
+	# Face (skin)
+	for y in range(6, 20):
+		var fw = 0
+		if y <= 8: fw = 5
+		elif y <= 12: fw = 6
+		elif y <= 16: fw = 5
+		else: fw = 4
+		for x in range(16 - fw, 16 + fw):
+			img.set_pixel(x, y, skin)
+	# Chin
+	img.set_pixel(15, 18, skin_dark); img.set_pixel(16, 18, skin_dark); img.set_pixel(17, 18, skin_dark)
+
+	# Eyes (big anime eyes)
+	# Left eye
+	for y in range(10, 14):
+		for x in range(11, 14):
+			img.set_pixel(x, y, white)
+	img.set_pixel(12, 11, eye_blue); img.set_pixel(12, 12, eye_blue)
+	img.set_pixel(11, 11, eye_dark); img.set_pixel(11, 12, eye_dark)
+	img.set_pixel(10, 11, eye_dark)
+	img.set_pixel(12, 10, white)  # highlight
+	# Right eye
+	for y in range(10, 14):
+		for x in range(18, 21):
+			img.set_pixel(x, y, white)
+	img.set_pixel(19, 11, eye_blue); img.set_pixel(19, 12, eye_blue)
+	img.set_pixel(20, 11, eye_dark); img.set_pixel(20, 12, eye_dark)
+	img.set_pixel(21, 11, eye_dark)
+	img.set_pixel(19, 10, white)  # highlight
+
+	# Blush
+	img.set_pixel(10, 15, blush); img.set_pixel(11, 15, blush)
+	img.set_pixel(20, 15, blush); img.set_pixel(21, 15, blush)
+
+	# Mouth (small cute)
+	img.set_pixel(15, 16, Color(0.9, 0.4, 0.4))
+	img.set_pixel(16, 16, Color(0.9, 0.4, 0.4))
+
+	# Bangs (hair over forehead)
+	for y in range(5, 8):
+		for x in range(10, 22):
+			if img.get_pixel(x, y).a == 0 or img.get_pixel(x, y) == hair:
+				img.set_pixel(x, y, hair)
+	# Bang tips
+	img.set_pixel(9, 7, hair); img.set_pixel(10, 8, hair)
+	img.set_pixel(22, 7, hair); img.set_pixel(21, 8, hair)
+
+	# Body/Dress (rows 19-31)
+	for y in range(20, 29):
+		var bw = 0
+		if y <= 22: bw = 4
+		elif y <= 25: bw = 5
+		else: bw = 6
+		for x in range(16 - bw, 16 + bw):
+			img.set_pixel(x, y, dress)
+	# Dress detail (belt/sash)
+	for x in range(12, 21):
+		img.set_pixel(x, 23, ribbon)
+	# Dress highlight
+	for y in range(20, 25):
+		for x in range(14, 17):
+			if img.get_pixel(x, y) == dress:
+				img.set_pixel(x, y, dress_light)
+	# Skirt ruffle
+	for x in range(11, 22):
+		img.set_pixel(x, 28, dress)
+
+	# Legs
+	for y in range(29, 32):
+		img.set_pixel(14, y, skin)
+		img.set_pixel(18, y, skin)
+	# Shoes
+	img.set_pixel(13, 31, Color(0.3, 0.15, 0.1)); img.set_pixel(14, 31, Color(0.3, 0.15, 0.1))
+	img.set_pixel(15, 31, Color(0.3, 0.15, 0.1))
+	img.set_pixel(18, 31, Color(0.3, 0.15, 0.1)); img.set_pixel(19, 31, Color(0.3, 0.15, 0.1))
+
+	# Arms
+	for y in range(21, 25):
+		img.set_pixel(10, y, skin)
+		img.set_pixel(22, y, skin)
+
+	# Weapon (staff/wand on right side)
+	for x in range(24, 29):
+		img.set_pixel(x, 18, weapon)
+	for x in range(25, 28):
+		img.set_pixel(x, 17, weapon)
+	img.set_pixel(28, 19, weapon)
+	# Weapon gem
+	img.set_pixel(26, 17, Color(0.3, 1, 1))
+	img.set_pixel(26, 18, Color(0.2, 0.8, 0.9))
+
 	return _create_texture(img)
 
 # --- GRUNT: 24x24 red blob enemy ---
