@@ -60,8 +60,10 @@ func _process(_delta: float) -> void:
 		return
 	GameManager.spawn_timer -= get_process_delta_time()
 	if GameManager.spawn_timer <= 0 and GameManager.enemies_spawned < GameManager.enemies_to_spawn:
-		spawn_enemy()
-		GameManager.spawn_timer = GameManager.spawn_interval
+		var burst_count = randi_range(2, min(5, GameManager.enemies_to_spawn - GameManager.enemies_spawned))
+		for _i in range(burst_count):
+			spawn_enemy()
+		GameManager.spawn_timer = GameManager.spawn_interval * 4.0
 	_magnet_drops(_delta)
 	_update_vignette()
 
