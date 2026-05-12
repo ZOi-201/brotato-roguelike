@@ -16,9 +16,9 @@ var stat_options: Dictionary = {
 	"harvesting":      {"label": "收获",      "icon": "✦",  "color": Color(0.5, 1, 0.3)},
 }
 var stat_amounts: Dictionary = {
-	"max_hp": 5.0, "hp_regen": 1.0, "damage_mult": 0.05,
-	"attack_speed_mult": 0.05, "speed": 3.0, "dodge": 0.03,
-	"armor": 1.0, "luck": 3.0, "harvesting": 3.0,
+	"max_hp": 12.0, "hp_regen": 2.0, "damage_mult": 0.20,
+	"attack_speed_mult": 0.20, "speed": 8.0, "dodge": 0.05,
+	"armor": 2.0, "luck": 5.0, "harvesting": 5.0,
 }
 var stat_max: Dictionary = {
 	"hp_regen": 10, "speed": 10, "dodge": 20,

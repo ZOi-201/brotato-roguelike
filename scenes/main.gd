@@ -249,7 +249,7 @@ func _magnet_drops(delta: float) -> void:
 			if not drop.has_meta("spawn_time"):
 				drop.set_meta("spawn_time", Time.get_ticks_msec() / 1000.0)
 			var age = Time.get_ticks_msec() / 1000.0 - drop.get_meta("spawn_time")
-			if age < 0.25:
+			if age < 0.1:
 				continue
 			var dir = (player.global_position - drop.global_position).normalized()
 			var dist = player.global_position.distance_to(drop.global_position)
