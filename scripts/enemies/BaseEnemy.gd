@@ -45,8 +45,19 @@ func _check_contact_damage(delta: float) -> void:
 		var col = get_slide_collision(i)
 		if col.get_collider() and col.get_collider().is_in_group("player"):
 			player.stats.take_damage(enemy_data.damage)
-			_damage_cooldown = 0.5
+			_damage_cooldown = 0.8
+			_attack_lunge()
 			break
+
+func _attack_lunge() -> void:
+	var lunge_dir = (player.global_position - global_position).normalized()
+	global_position -= lunge_dir * 8
+	if flash_tween and flash_tween.is_running():
+		flash_tween.kill()
+	modulate = Color.RED
+	flash_tween = create_tween()
+	flash_tween.tween_property(self, "modulate", Color.RED, 0.08)
+	flash_tween.tween_property(self, "modulate", Color(1, 1, 1, 1), 0.15)
 
 func _move_toward_player(_delta: float) -> void:
 	var direction = (player.global_position - global_position).normalized()

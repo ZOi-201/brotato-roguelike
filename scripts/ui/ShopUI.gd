@@ -108,10 +108,15 @@ func _on_state_changed(state: GameManager.GameState) -> void:
 
 func _show_with_fade() -> void:
 	visible = true
-	material_display.text = "Materials: %d" % get_tree().get_first_node_in_group("player").stats.materials
+	_refresh_material_display()
 	$ColorRect.modulate.a = 0
 	var tween = create_tween()
 	tween.tween_property($ColorRect, "modulate:a", 1.0, 0.15)
+
+func _refresh_material_display() -> void:
+	var player = get_tree().get_first_node_in_group("player")
+	if player:
+		material_display.text = "金币: %d" % player.stats.materials
 
 func generate_offers() -> void:
 	current_offers.clear()
@@ -126,14 +131,14 @@ func _update_display() -> void:
 	for child in items_container.get_children():
 		child.queue_free()
 	var player = get_tree().get_first_node_in_group("player")
-	material_display.text = "Materials: %d" % player.stats.materials
+	_refresh_material_display()
 	for offer in current_offers:
 		var card = _create_offer_card(player, offer)
 		items_container.add_child(card)
 
 func _create_offer_card(player: Player, offer: Variant) -> Control:
 	var card = Panel.new()
-	card.custom_minimum_size = Vector2(160, 110)
+	card.custom_minimum_size = Vector2(135, 95)
 	card.size_flags_horizontal = Control.SIZE_EXPAND
 	var is_weapon = offer is WeaponData
 	var border_color = Color.ORANGE if is_weapon else Color(0.3, 0.6, 1)
@@ -164,7 +169,7 @@ func _create_offer_card(player: Player, offer: Variant) -> Control:
 		level_lbl.add_theme_font_size_override("font_size", 12)
 		level_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		var price_lbl = Label.new()
-		price_lbl.text = "%d Mat" % _weapon_price(player, wd)
+		price_lbl.text = "%d 金币" % _weapon_price(player, wd)
 		price_lbl.add_theme_color_override("font_color", Color(1, 0.85, 0.2))
 		price_lbl.add_theme_font_size_override("font_size", 18)
 		price_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
@@ -184,7 +189,7 @@ func _create_offer_card(player: Player, offer: Variant) -> Control:
 		desc_lbl.add_theme_font_size_override("font_size", 11)
 		desc_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		var price_lbl = Label.new()
-		price_lbl.text = "%d Mat" % item.price
+		price_lbl.text = "%d 金币" % item.price
 		price_lbl.add_theme_color_override("font_color", Color(1, 0.85, 0.2))
 		price_lbl.add_theme_font_size_override("font_size", 18)
 		price_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
@@ -193,12 +198,44 @@ func _create_offer_card(player: Player, offer: Variant) -> Control:
 		vbox.add_child(price_lbl)
 
 	card.add_child(vbox)
+	# Color price based on affordability
+	var current_player = get_tree().get_first_node_in_group("player")
+	var price = 0
+	if is_weapon:
+		price = _weapon_price(current_player, offer as WeaponData)
+	else:
+		price = (offer as ItemData).price
+	if current_player and current_player.stats.materials < price:
+		_card_price_label(vbox).add_theme_color_override("font_color", Color(1, 0.3, 0.3))
+
 	card.gui_input.connect(func(event: InputEvent):
 		if event is InputEventMouseButton and event.pressed:
-			if is_weapon: _buy_weapon(player, offer as WeaponData)
+			var p = get_tree().get_first_node_in_group("player")
+			var cost = 0
+			if is_weapon:
+				cost = _weapon_price(p, offer as WeaponData)
+			else:
+				cost = (offer as ItemData).price
+			if not p or p.stats.materials < cost:
+				_flash_insufficient(card)
+				return
+			if is_weapon: _buy_weapon(p, offer as WeaponData)
 			else: _buy_item(offer as ItemData)
 	)
 	return card
+
+func _card_price_label(vbox: VBoxContainer) -> Label:
+	for c in vbox.get_children():
+		if c is Label:
+			var t: String = c.text
+			if "Mat" in t or "金币" in t:
+				return c
+	return vbox.get_child(vbox.get_child_count() - 1)
+
+func _flash_insufficient(card: Panel) -> void:
+	var tween = card.create_tween()
+	card.modulate = Color(1, 0.3, 0.3)
+	tween.tween_property(card, "modulate", Color(1, 1, 1, 1), 0.3)
 
 func _weapon_level_text(player: Player, wd: WeaponData) -> String:
 	for w in player.weapons:

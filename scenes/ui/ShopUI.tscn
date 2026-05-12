@@ -19,10 +19,10 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -380.0
-offset_top = -130.0
-offset_right = 380.0
-offset_bottom = 130.0
+offset_left = -320.0
+offset_top = -120.0
+offset_right = 320.0
+offset_bottom = 120.0
 grow_horizontal = 2
 grow_vertical = 2
 
@@ -35,7 +35,7 @@ grow_vertical = 2
 theme_override_constants/separation = 8
 
 [node name="Title" type="Label" parent="Panel/VBox"]
-text = "SHOP"
+text = "商店"
 horizontal_alignment = 1
 
 [node name="MaterialLabel" type="Label" parent="Panel/VBox"]
@@ -55,8 +55,8 @@ theme_override_constants/separation = 10
 
 [node name="RefreshBtn" type="Button" parent="Panel/VBox/BtnRow"]
 layout_mode = 2
-text = "Refresh (1 Mat)"
+text = "刷新 (1材料)"
 
 [node name="CloseBtn" type="Button" parent="Panel/VBox/BtnRow"]
 layout_mode = 2
-text = "Continue"
+text = "继续"

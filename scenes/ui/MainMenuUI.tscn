@@ -35,8 +35,8 @@ grow_vertical = 2
 theme_override_constants/separation = 20
 
 [node name="Title" type="Label" parent="Panel/VBox"]
-text = "Brotato Roguelike"
+text = "土豆兄弟"
 horizontal_alignment = 1
 
 [node name="StartBtn" type="Button" parent="Panel/VBox"]
-text = "Start Game"
+text = "开始游戏"

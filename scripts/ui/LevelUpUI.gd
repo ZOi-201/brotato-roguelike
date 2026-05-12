@@ -5,15 +5,15 @@ extends CanvasLayer
 @onready var options_container: HBoxContainer = $Panel/VBox/HBox
 
 var stat_options: Dictionary = {
-	"max_hp":          {"label": "Max HP",       "icon": "♥",  "color": Color(1, 0.2, 0.2)},
-	"hp_regen":        {"label": "HP Regen",     "icon": "♻",  "color": Color(1, 0.5, 0.5)},
-	"damage_mult":     {"label": "Damage",       "icon": "⚔",  "color": Color(1, 0.5, 0)},
-	"attack_speed_mult":{"label":"Attack Speed", "icon": "⚡",  "color": Color(1, 0.7, 0)},
-	"speed":           {"label": "Speed",        "icon": "»",  "color": Color(0.3, 0.6, 1)},
-	"dodge":           {"label": "Dodge",        "icon": "◎",  "color": Color(0.4, 0.8, 1)},
-	"armor":           {"label": "Armor",        "icon": "▣",  "color": Color(0.6, 0.6, 0.65)},
-	"luck":            {"label": "Luck",         "icon": "✦",  "color": Color(0.3, 1, 0.4)},
-	"harvesting":      {"label": "Harvesting",   "icon": "✦",  "color": Color(0.5, 1, 0.3)},
+	"max_hp":          {"label": "最大生命",  "icon": "♥",  "color": Color(1, 0.2, 0.2)},
+	"hp_regen":        {"label": "生命回复",  "icon": "♻",  "color": Color(1, 0.5, 0.5)},
+	"damage_mult":     {"label": "伤害",      "icon": "⚔",  "color": Color(1, 0.5, 0)},
+	"attack_speed_mult":{"label":"攻击速度",  "icon": "⚡",  "color": Color(1, 0.7, 0)},
+	"speed":           {"label": "移动速度",  "icon": "»",  "color": Color(0.3, 0.6, 1)},
+	"dodge":           {"label": "闪避",      "icon": "◎",  "color": Color(0.4, 0.8, 1)},
+	"armor":           {"label": "护甲",      "icon": "▣",  "color": Color(0.6, 0.6, 0.65)},
+	"luck":            {"label": "幸运",      "icon": "✦",  "color": Color(0.3, 1, 0.4)},
+	"harvesting":      {"label": "收获",      "icon": "✦",  "color": Color(0.5, 1, 0.3)},
 }
 var stat_amounts: Dictionary = {
 	"max_hp": 5.0, "hp_regen": 1.0, "damage_mult": 0.05,
@@ -75,7 +75,7 @@ func show_options() -> void:
 
 func _create_card(stat: String, info: Dictionary, amount: float, current_lvl: int) -> Control:
 	var card = Panel.new()
-	card.custom_minimum_size = Vector2(160, 100)
+	card.custom_minimum_size = Vector2(140, 90)
 	card.size_flags_horizontal = Control.SIZE_EXPAND
 	var card_style = StyleBoxFlat.new()
 	card_style.bg_color = Color(0.12, 0.12, 0.18, 1)
@@ -94,20 +94,20 @@ func _create_card(stat: String, info: Dictionary, amount: float, current_lvl: in
 	var icon_label = Label.new()
 	icon_label.text = info["icon"]
 	icon_label.add_theme_color_override("font_color", info["color"])
-	icon_label.add_theme_font_size_override("font_size", 24)
+	icon_label.add_theme_font_size_override("font_size", 22)
 	icon_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 
 	var name_label = Label.new()
 	name_label.text = info["label"]
 	name_label.add_theme_color_override("font_color", Color(0.9, 0.9, 0.9))
-	name_label.add_theme_font_size_override("font_size", 14)
+	name_label.add_theme_font_size_override("font_size", 13)
 	name_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 
 	var value_label = Label.new()
 	var amt_str = "+%.0f" % amount if amount >= 1 else "+%d%%" % int(amount * 100)
 	value_label.text = "%s  Lv.%d→%d" % [amt_str, current_lvl, current_lvl + 1]
 	value_label.add_theme_color_override("font_color", info["color"].lightened(0.2))
-	value_label.add_theme_font_size_override("font_size", 13)
+	value_label.add_theme_font_size_override("font_size", 12)
 	value_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 
 	vbox.add_child(icon_label)
@@ -115,7 +115,6 @@ func _create_card(stat: String, info: Dictionary, amount: float, current_lvl: in
 	vbox.add_child(value_label)
 	card.add_child(vbox)
 
-	# Click handler
 	card.gui_input.connect(func(event: InputEvent):
 		if event is InputEventMouseButton and event.pressed:
 			_select(stat)

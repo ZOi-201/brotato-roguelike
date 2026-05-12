@@ -43,6 +43,6 @@ text = ""
 horizontal_alignment = 1
 
 [node name="RestartBtn" type="Button" parent="Panel/VBox"]
-text = "Restart"
+text = "重新开始"
 
 [connection signal="pressed" from="Panel/VBox/RestartBtn" to="." method="_on_restart_pressed"]

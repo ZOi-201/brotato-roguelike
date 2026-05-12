@@ -39,12 +39,12 @@ func _on_state_changed(state: GameManager.GameState) -> void:
 		visible = true
 		var player = get_tree().get_first_node_in_group("player")
 		if GameManager.current_wave >= 20:
-			title_label.text = "VICTORY!"
+			title_label.text = "胜利!"
 			title_label.add_theme_color_override("font_color", Color(0.3, 1, 0.4))
 		else:
-			title_label.text = "DEFEAT"
+			title_label.text = "失败"
 			title_label.add_theme_color_override("font_color", Color(1, 0.2, 0.2))
-		stats_label.text = "Waves: %d\nKills: %d\nMaterials: %d" % [
+		stats_label.text = "波数: %d\n击杀: %d\n金币: %d" % [
 			GameManager.current_wave, GameManager.total_kills,
 			player.stats.materials if player else 0
 		]
