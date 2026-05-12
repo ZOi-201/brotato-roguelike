@@ -6,10 +6,16 @@
 script = ExtResource("1_hud")
 
 [node name="Panel" type="Panel" parent="."]
+anchors_preset = 10
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 1.0
+anchor_bottom = 0.0
 offset_left = 0.0
 offset_top = 0.0
-offset_right = 1024.0
-offset_bottom = 48.0
+offset_right = 0.0
+offset_bottom = 52.0
+grow_horizontal = 2
 
 [node name="HBox" type="HBoxContainer" parent="Panel"]
 anchors_preset = 15
@@ -17,46 +23,67 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/separation = 14
+theme_override_constants/separation = 0
 
-[node name="HPBar" type="ProgressBar" parent="Panel/HBox"]
-custom_minimum_size = Vector2(190, 24)
+[node name="Left" type="HBoxContainer" parent="Panel/HBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 8
+
+[node name="HPBar" type="ProgressBar" parent="Panel/HBox/Left"]
+layout_mode = 2
+custom_minimum_size = Vector2(180, 26)
 max_value = 100.0
 value = 100.0
 show_percentage = false
 
-[node name="HP_Label" type="Label" parent="Panel/HBox/HPBar"]
+[node name="HP_Label" type="Label" parent="Panel/HBox/Left/HPBar"]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_left = 4.0
-offset_top = 2.0
+offset_top = 1.0
 offset_right = -4.0
-offset_bottom = -2.0
+offset_bottom = -1.0
 grow_horizontal = 2
 grow_vertical = 2
-text = "100 / 100"
+text = "100/100"
 horizontal_alignment = 1
 vertical_alignment = 1
 clip_contents = true
 
-[node name="XPBar" type="ProgressBar" parent="Panel/HBox"]
-custom_minimum_size = Vector2(180, 24)
+[node name="Center" type="VBoxContainer" parent="Panel/HBox"]
+layout_mode = 2
+size_flags_horizontal = 4
+alignment = 1
+
+[node name="WaveLabel" type="Label" parent="Panel/HBox/Center"]
+layout_mode = 2
+text = "波 1/20"
+horizontal_alignment = 1
+
+[node name="TimerLabel" type="Label" parent="Panel/HBox/Center"]
+layout_mode = 2
+text = "22 秒"
+horizontal_alignment = 1
+
+[node name="Right" type="HBoxContainer" parent="Panel/HBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+alignment = 2
+theme_override_constants/separation = 12
+
+[node name="XPBar" type="ProgressBar" parent="Panel/HBox/Right"]
+layout_mode = 2
+custom_minimum_size = Vector2(140, 18)
 max_value = 50.0
 value = 0.0
+show_percentage = false
 
-[node name="WaveLabel" type="Label" parent="Panel/HBox"]
-text = "波: 1/20"
-vertical_alignment = 1
+[node name="GoldLabel" type="Label" parent="Panel/HBox/Right"]
+layout_mode = 2
+text = "金币 0"
 
-[node name="TimerLabel" type="Label" parent="Panel/HBox"]
-text = "22秒"
-vertical_alignment = 1
-
-[node name="MaterialLabel" type="Label" parent="Panel/HBox"]
-text = "金币: 0"
-vertical_alignment = 1
-
-[node name="KillLabel" type="Label" parent="Panel/HBox"]
-text = "击杀: 0"
-vertical_alignment = 1
+[node name="KillLabel" type="Label" parent="Panel/HBox/Right"]
+layout_mode = 2
+text = "击杀 0"
