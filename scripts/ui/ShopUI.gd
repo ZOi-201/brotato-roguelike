@@ -295,4 +295,4 @@ func _on_refresh() -> void:
 		generate_offers()
 
 func _on_close() -> void:
-	GameManager.start_next_wave()
+	GameManager.change_state(GameManager.GameState.PLAYING)

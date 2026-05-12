@@ -71,13 +71,17 @@ func _process(_delta: float) -> void:
 		return
 	GameManager.spawn_timer -= get_process_delta_time()
 	if GameManager.spawn_timer <= 0 and GameManager.enemies_spawned < GameManager.enemies_to_spawn:
-		var burst_count = randi_range(3, min(7, GameManager.enemies_to_spawn - GameManager.enemies_spawned))
+		var burst_count = randi_range(5, min(12, GameManager.enemies_to_spawn - GameManager.enemies_spawned))
 		for _i in range(burst_count):
 			spawn_enemy()
 		GameManager.spawn_timer = GameManager.spawn_interval * 2.5
 	_magnet_drops(_delta)
 	_update_vignette()
 	queue_redraw()
+
+func _input(event: InputEvent) -> void:
+	if event.is_action_pressed("ui_accept") and GameManager.current_state == GameManager.GameState.PLAYING:
+		GameManager.change_state(GameManager.GameState.SHOP)
 
 func _update_vignette() -> void:
 	if not player:

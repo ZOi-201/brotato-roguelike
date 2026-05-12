@@ -54,7 +54,7 @@ func start_wave() -> void:
 	else:
 		wave_duration = 90.0
 	wave_timer = wave_duration
-	enemies_to_spawn = 15 + current_wave * 3
+	enemies_to_spawn = 45 + current_wave * 6
 	enemies_spawned = 0
 	spawn_interval = maxf(0.15, 1.0 - current_wave * 0.04)
 	spawn_timer = 0.0
@@ -65,8 +65,8 @@ func end_wave() -> void:
 	if current_wave >= 20:
 		change_state(GameState.GAME_OVER)
 		return
-	change_state(GameState.SHOP)
 	current_wave += 1
+	start_wave()
 
 func start_next_wave() -> void:
 	change_state(GameState.PLAYING)
