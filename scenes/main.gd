@@ -164,7 +164,8 @@ func _on_enemy_killed(ed: EnemyData, pos: Vector2, is_elite: bool, is_boss: bool
 func _spawn_drops_deferred(ed: EnemyData, pos: Vector2, is_elite: bool, is_boss: bool) -> void:
 	_spawn_xp_drop(pos, ed.xp_reward)
 	if randf() < ed.material_drop_chance or is_elite or is_boss:
-		var amount = 1 + int(is_elite) * 2 + int(is_boss) * 5 + GameManager.current_wave / 5
+		var amount = 2 + int(is_elite) * 3 + int(is_boss) * 8 + GameManager.current_wave / 3
+		amount += randi_range(0, 1)
 		_spawn_material_drop(pos, amount)
 
 func _spawn_xp_drop(pos: Vector2, amount: float) -> void:

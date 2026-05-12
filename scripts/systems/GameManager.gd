@@ -36,6 +36,10 @@ func _process(delta: float) -> void:
 func start_game() -> void:
 	current_wave = 1
 	total_kills = 0
+	# Give starting materials so player can buy at least one item after wave 1
+	var player = get_tree().get_first_node_in_group("player")
+	if player:
+		player.stats.materials = 8
 	change_state(GameState.PLAYING)
 	start_wave()
 
