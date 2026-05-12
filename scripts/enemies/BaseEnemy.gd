@@ -14,10 +14,15 @@ var _sprite: Sprite2D
 
 func _ready() -> void:
 	add_to_group("enemies")
-	max_hp = enemy_data.max_hp * (1.0 if not enemy_data.is_elite else 3.0)
+	var wave = GameManager.current_wave
+	max_hp = (enemy_data.max_hp + enemy_data.hp_per_wave * (wave - 1)) * (3.0 if enemy_data.is_elite else 1.0)
 	if enemy_data.is_boss:
-		max_hp *= 10.0
+		max_hp = enemy_data.max_hp + enemy_data.hp_per_wave * (wave - 1)
 	hp = max_hp
+	# Scale XP and materials with wave
+	enemy_data = enemy_data.duplicate()
+	enemy_data.damage = int(enemy_data.damage + enemy_data.damage_per_wave * (wave - 1))
+	enemy_data.xp_reward = enemy_data.xp_reward * (1.0 + wave * 0.15)
 	_setup_sprite()
 
 func _setup_sprite() -> void:

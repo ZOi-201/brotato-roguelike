@@ -40,9 +40,17 @@ func start_game() -> void:
 	start_wave()
 
 func start_wave() -> void:
-	wave_duration = 18.0 + current_wave * 1.5
+	# Brotato-inspired wave timing
+	if current_wave <= 4:
+		wave_duration = 15.0 + current_wave * 5.0
+	elif current_wave <= 9:
+		wave_duration = 30.0 + (current_wave - 4) * 5.0
+	elif current_wave <= 19:
+		wave_duration = 55.0
+	else:
+		wave_duration = 90.0
 	wave_timer = wave_duration
-	enemies_to_spawn = 10 + current_wave * 2
+	enemies_to_spawn = 8 + current_wave * 2
 	enemies_spawned = 0
 	spawn_interval = maxf(0.3, 1.5 - current_wave * 0.05)
 	spawn_timer = 0.0

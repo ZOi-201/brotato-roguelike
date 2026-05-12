@@ -130,8 +130,10 @@ func _spawn_boss() -> void:
 
 func _create_boss_data() -> EnemyData:
 	var bd = EnemyData.new()
-	bd.enemy_name = "Boss"; bd.max_hp = 500.0; bd.speed = 60.0
-	bd.damage = 25; bd.xp_reward = 100.0; bd.material_drop_chance = 1.0
+	bd.enemy_name = "Boss"; bd.max_hp = 200.0; bd.hp_per_wave = 80.0
+	bd.speed = 60.0
+	bd.damage = 15; bd.damage_per_wave = 1.0
+	bd.xp_reward = 100.0; bd.material_drop_chance = 1.0
 	bd.color = Color.RED; bd.size = 36.0; bd.is_boss = true
 	return bd
 

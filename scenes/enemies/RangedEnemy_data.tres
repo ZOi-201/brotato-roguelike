@@ -5,11 +5,13 @@
 [resource]
 script = ExtResource("1_enemydata")
 enemy_name = "Sniper"
-max_hp = 25.0
-speed = 60.0
-damage = 10
-xp_reward = 10.0
-material_drop_chance = 0.3
+max_hp = 8.0
+hp_per_wave = 2.0
+speed = 65.0
+damage = 7
+damage_per_wave = 0.4
+xp_reward = 12.0
+material_drop_chance = 0.35
 color = Color(0.7, 0, 1, 1)
 size = 14.0
 is_elite = false
