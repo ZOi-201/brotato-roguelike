@@ -16,10 +16,24 @@ func _ready() -> void:
 	GameManager.game_state_changed.connect(_on_game_state_changed)
 	GameManager.enemy_killed.connect(_on_enemy_killed)
 	GameManager.wave_changed.connect(_on_wave_changed)
+	_setup_ground()
 	_setup_arena()
 	_setup_vignette()
 	_setup_wave_label()
 	_give_starter_weapon()
+
+func _setup_ground() -> void:
+	var tex = SpriteAssets.textures.get("ground")
+	if not tex:
+		return
+	for x in range(0, 1024, 64):
+		for y in range(0, 768, 64):
+			var tile = Sprite2D.new()
+			tile.texture = tex
+			tile.centered = false
+			tile.position = Vector2(x, y)
+			tile.z_index = -10
+			add_child(tile)
 
 func _setup_arena() -> void:
 	# Add a grid background via _draw
@@ -159,19 +173,17 @@ func _spawn_xp_drop(pos: Vector2, amount: float) -> void:
 	drop.add_to_group("xp_drops")
 	var cs = CollisionShape2D.new()
 	var circle = CircleShape2D.new()
-	circle.radius = 6
+	circle.radius = 8
 	cs.shape = circle
 	drop.add_child(cs)
-	var rect = ColorRect.new()
-	rect.size = Vector2(8, 8)
-	rect.color = Color.GREEN
-	rect.position = -rect.size / 2
-	drop.add_child(rect)
+	var spr = Sprite2D.new()
+	spr.texture = SpriteAssets.textures.get("xp_drop")
+	spr.centered = true
+	drop.add_child(spr)
 	drop.global_position = pos
 	drop.set_meta("xp_amount", amount)
 	drop.body_entered.connect(func(b): if b.is_in_group("player"): _collect_xp(drop))
 	add_child(drop)
-	# Spawn pop animation
 	drop.scale = Vector2(0.3, 0.3)
 	var tween = drop.create_tween()
 	tween.tween_property(drop, "scale", Vector2(1.2, 1.2), 0.1)
@@ -182,14 +194,13 @@ func _spawn_material_drop(pos: Vector2, amount: int) -> void:
 	drop.add_to_group("material_drops")
 	var cs = CollisionShape2D.new()
 	var circle = CircleShape2D.new()
-	circle.radius = 7
+	circle.radius = 8
 	cs.shape = circle
 	drop.add_child(cs)
-	var rect = ColorRect.new()
-	rect.size = Vector2(11, 11)
-	rect.color = Color.YELLOW
-	rect.position = -rect.size / 2
-	drop.add_child(rect)
+	var spr = Sprite2D.new()
+	spr.texture = SpriteAssets.textures.get("mat_drop")
+	spr.centered = true
+	drop.add_child(spr)
 	drop.global_position = pos
 	drop.set_meta("material_amount", amount)
 	drop.body_entered.connect(func(b): if b.is_in_group("player"): _collect_material(drop))

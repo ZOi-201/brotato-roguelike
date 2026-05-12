@@ -14,11 +14,11 @@ var hit_enemies: Array = []
 func _ready() -> void:
 	add_to_group("projectiles")
 	body_entered.connect(_on_body_entered)
-	var rect = ColorRect.new()
-	rect.size = Vector2(8, 4)
-	rect.color = color
-	rect.position = -rect.size / 2
-	add_child(rect)
+	var spr = Sprite2D.new()
+	spr.texture = SpriteAssets.textures.get("bullet")
+	spr.modulate = color
+	spr.centered = true
+	add_child(spr)
 	look_at(global_position + direction)
 
 func _process(delta: float) -> void:
