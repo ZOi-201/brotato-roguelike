@@ -5,11 +5,11 @@
 [resource]
 script = ExtResource("1_enemydata")
 enemy_name = "Grunt"
-max_hp = 30.0
-speed = 80.0
+max_hp = 22.0
+speed = 85.0
 damage = 8
-xp_reward = 5.0
-material_drop_chance = 0.2
+xp_reward = 8.0
+material_drop_chance = 0.3
 color = Color(1, 0, 0, 1)
 size = 12.0
 is_elite = false

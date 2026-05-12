@@ -36,7 +36,6 @@ func _setup_ground() -> void:
 			add_child(tile)
 
 func _setup_arena() -> void:
-	# Add a grid background via _draw
 	pass
 
 func _setup_vignette() -> void:
@@ -51,10 +50,8 @@ func _setup_wave_label() -> void:
 	wave_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 
 func _draw() -> void:
-	# Draw arena boundary
 	var arena_rect = Rect2(Vector2(62, 62), Vector2(900, 644))
 	draw_rect(arena_rect, Color(0.2, 0.2, 0.25, 0.8), false, 2.0)
-	# Draw subtle grid
 	var grid_color = Color(0.15, 0.15, 0.18, 0.5)
 	for x in range(100, 925, 50):
 		draw_line(Vector2(x, 64), Vector2(x, 704), grid_color, 0.5)
@@ -63,7 +60,7 @@ func _draw() -> void:
 
 func _give_starter_weapon() -> void:
 	var data = WeaponData.new()
-	data.weapon_name = "Pistol"; data.base_damage = 10.0; data.attack_speed = 1.0
+	data.weapon_name = "手枪"; data.base_damage = 10.0; data.attack_speed = 1.0
 	data.range = 300.0; data.projectile_speed = 400.0; data.projectile_color = Color.YELLOW
 	var pistol = Pistol.new()
 	pistol.weapon_data = data
@@ -80,6 +77,7 @@ func _process(_delta: float) -> void:
 		GameManager.spawn_timer = GameManager.spawn_interval * 4.0
 	_magnet_drops(_delta)
 	_update_vignette()
+	queue_redraw()
 
 func _update_vignette() -> void:
 	if not player:
@@ -109,7 +107,6 @@ func spawn_enemy() -> void:
 		enemy.enemy_data = enemy.enemy_data.duplicate()
 		enemy.enemy_data.is_elite = true
 		enemy.scale = Vector2(1.5, 1.5)
-	# Spawn animation
 	enemy.modulate.a = 0
 	enemy.scale *= 0.3
 	add_child(enemy)
@@ -143,7 +140,7 @@ func _on_game_state_changed(state: GameManager.GameState) -> void:
 
 func _on_wave_changed(wave: int) -> void:
 	if wave == 20:
-		return  # Boss announced separately
+		return
 	_show_wave_announce("Wave %d" % wave)
 
 func _show_wave_announce(text: String) -> void:
@@ -155,7 +152,6 @@ func _show_wave_announce(text: String) -> void:
 	tween.tween_property(wave_label, "scale", Vector2(1, 1), 0.2)
 	tween.tween_property(wave_label, "scale", Vector2(1, 1), 0.8)
 	tween.tween_property(wave_label, "modulate:a", 0.0, 0.5).set_delay(0.0)
-	# Fade out the label text color
 	var label_tween = wave_label.create_tween()
 	label_tween.tween_interval(1.3)
 	label_tween.tween_property(wave_label, "theme_override_colors/font_colors/font_color", Color(1, 1, 1, 0), 0.5)
@@ -166,14 +162,15 @@ func _on_enemy_killed(ed: EnemyData, pos: Vector2, is_elite: bool, is_boss: bool
 func _spawn_drops_deferred(ed: EnemyData, pos: Vector2, is_elite: bool, is_boss: bool) -> void:
 	_spawn_xp_drop(pos, ed.xp_reward)
 	if randf() < ed.material_drop_chance or is_elite or is_boss:
-		_spawn_material_drop(pos, 1 + int(is_elite) * 2 + int(is_boss) * 5)
+		var amount = 1 + int(is_elite) * 2 + int(is_boss) * 5 + GameManager.current_wave / 5
+		_spawn_material_drop(pos, amount)
 
 func _spawn_xp_drop(pos: Vector2, amount: float) -> void:
 	var drop = Area2D.new()
 	drop.add_to_group("xp_drops")
 	var cs = CollisionShape2D.new()
 	var circle = CircleShape2D.new()
-	circle.radius = 8
+	circle.radius = 6
 	cs.shape = circle
 	drop.add_child(cs)
 	var spr = Sprite2D.new()
@@ -250,11 +247,11 @@ func _magnet_drops(delta: float) -> void:
 			if not drop.has_meta("spawn_time"):
 				drop.set_meta("spawn_time", Time.get_ticks_msec() / 1000.0)
 			var age = Time.get_ticks_msec() / 1000.0 - drop.get_meta("spawn_time")
-			if age < 0.5:
+			if age < 0.25:
 				continue
 			var dir = (player.global_position - drop.global_position).normalized()
 			var dist = player.global_position.distance_to(drop.global_position)
-			var speed = clampf(500.0 / maxf(dist, 1), 100, 500)
+			var speed = clampf(600.0 / maxf(dist, 1), 150, 600)
 			drop.global_position += dir * speed * delta
 
 func camera_shake() -> void:

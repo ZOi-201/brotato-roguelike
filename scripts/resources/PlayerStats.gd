@@ -56,7 +56,7 @@ func check_level_up() -> bool:
 func apply_level_up(stat: String, amount: float) -> void:
 	xp -= xp_to_next
 	level += 1
-	xp_to_next = level * 20 + 30
+	xp_to_next = level * 15 + 30
 	upgrade_levels[stat] = upgrade_levels.get(stat, 0) + 1
 	match stat:
 		"max_hp": max_hp += amount; hp = mini(hp + amount, max_hp)

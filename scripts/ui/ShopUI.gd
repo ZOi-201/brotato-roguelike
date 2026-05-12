@@ -216,7 +216,7 @@ func _weapon_price(player: Player, wd: WeaponData) -> int:
 	for w in player.weapons:
 		if w.weapon_data.weapon_name == wd.weapon_name:
 			cl = w.weapon_data.level; break
-	return 15 + cl * 10
+	return 12 + cl * 8
 
 func _flash_insufficient(card: Panel) -> void:
 	var tween = card.create_tween()
