@@ -23,6 +23,7 @@ theme_override_constants/separation = 14
 custom_minimum_size = Vector2(190, 24)
 max_value = 100.0
 value = 100.0
+show_percentage = false
 
 [node name="HP_Label" type="Label" parent="Panel/HBox/HPBar"]
 anchors_preset = 15
